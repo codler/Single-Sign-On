@@ -51,8 +51,13 @@ class Single_sign_on {
 		} elseif ($code = $_REQUEST['code']) {
 			$access_token = $this->get_access_token($code);
 			$graph_url = "https://graph.facebook.com/me?" . $access_token;
-			$user = json_decode(file_get_contents($graph_url));
-			return $user;
+			$user = json_decode(file_get_contents($graph_url), true);
+			return array(
+				'identity' => $user['id'],
+				'contact/email' => $user['email'],
+				'namePerson/first' => $user['first_name'],
+				'namePerson/last' => $user['last_name']			
+			);
 		}
 		return false;
 	}
